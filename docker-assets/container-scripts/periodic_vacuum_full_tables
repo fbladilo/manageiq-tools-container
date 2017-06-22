@@ -1,0 +1,40 @@
+#!/bin/bash
+
+set -e
+
+# Enable PG SCL
+APPLIANCE_PG_SCL_NAME=rh-postgresql95
+source /opt/rh/${APPLIANCE_PG_SCL_NAME}/enable
+
+echo "current time is $(date)"
+echo "periodic vacuum full for selected tables"
+
+psql "$(echo $DATABASE_URL | cut -d? -f1)" -a <<EOS 2>&1
+\timing
+VACUUM FULL VERBOSE vms;
+VACUUM FULL VERBOSE binary_blob_parts;
+VACUUM FULL VERBOSE binary_blobs;
+VACUUM FULL VERBOSE customization_specs;
+VACUUM FULL VERBOSE firewall_rules;
+VACUUM FULL VERBOSE hosts;
+VACUUM FULL VERBOSE storages;
+VACUUM FULL VERBOSE miq_schedules;
+VACUUM FULL VERBOSE event_logs;
+VACUUM FULL VERBOSE policy_events;
+VACUUM FULL VERBOSE snapshots;
+VACUUM FULL VERBOSE jobs;
+VACUUM FULL VERBOSE networks;
+VACUUM FULL VERBOSE miq_queue;
+VACUUM FULL VERBOSE miq_request_tasks;
+VACUUM FULL VERBOSE miq_workers;
+VACUUM FULL VERBOSE miq_servers;
+VACUUM FULL VERBOSE miq_searches;
+VACUUM FULL VERBOSE miq_scsi_luns;
+VACUUM FULL VERBOSE miq_scsi_targets;
+VACUUM FULL VERBOSE storage_files;
+VACUUM FULL VERBOSE taggings;
+VACUUM FULL VERBOSE vim_performance_states;
+EOS
+
+echo "periodic vacuum full completed at $(date)"
+echo "================="
