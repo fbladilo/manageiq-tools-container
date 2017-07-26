@@ -22,7 +22,10 @@ LABEL name="manageiq-tools" \
 
 ## Install tools
 RUN yum install -y centos-release-scl-rh && \
-    yum -y --setopt=tsflags=nodocs install rh-postgresql95-postgresql && \
+    yum install -y --setopt=tsflags=nodocs  \
+                rh-postgresql95-postgresql  \ 
+                rh-postgresql95-postgresql-server \
+                &&                          \
     yum clean all
 
 ## Copy scripts
