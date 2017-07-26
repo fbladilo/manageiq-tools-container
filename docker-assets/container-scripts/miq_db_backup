@@ -29,4 +29,4 @@ echo "Backup stored at : ${PV_BACKUP_DIR}/miq_backup_${BACKUP_TIMESTAMP}"
 # Set latest symlink to latest successful backup
 
 [[ -h ${PV_BACKUP_DIR}/latest ]] && rm -f ${PV_BACKUP_DIR}/latest
-pushd ${PV_BACKUP_DIR} && ln -s miq_backup_${BACKUP_TIMESTAMP} latest
+cd ${PV_BACKUP_DIR} && ln -s miq_backup_${BACKUP_TIMESTAMP} latest
