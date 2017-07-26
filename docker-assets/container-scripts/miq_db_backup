@@ -7,7 +7,7 @@ APPLIANCE_PG_SCL_NAME=${APPLIANCE_PG_SCL_NAME:-rh-postgresql95}
 # Define vars
 PG_BASEBACKUP=/opt/rh/${APPLIANCE_PG_SCL_NAME}/root/usr/bin/pg_basebackup
 PV_BACKUP_DIR=${PV_BACKUP_DIR:-/backups}
-BACKUP_TIMESTAMP=$(date +%s)
+BACKUP_TIMESTAMP=$(date +%Y%m%dT%H%M%S)
 
 # Sanity checks
 [[ -z ${DATABASE_URL} ]] && echo "ERROR: DATABASE_URL is not defined, exiting.." && exit 1
