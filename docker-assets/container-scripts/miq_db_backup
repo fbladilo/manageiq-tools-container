@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Enable PG SCL
+APPLIANCE_PG_SCL_NAME=${APPLIANCE_PG_SCL_NAME:-rh-postgresql95}
+[[ -f /opt/rh/${APPLIANCE_PG_SCL_NAME}/enable ]] && source /opt/rh/${APPLIANCE_PG_SCL_NAME}/enable
+
+# Define vars
+PG_BASEBACKUP=/opt/rh/${APPLIANCE_PG_SCL_NAME}/root/usr/bin/pg_basebackup
+PV_BACKUP_DIR=${PV_BACKUP_DIR:-/backups}
+BACKUP_TIMESTAMP=$(date +%s)
+
+# Sanity checks
+[[ -z ${DATABASE_URL} ]] && echo "ERROR: DATABASE_URL is not defined, exiting.." && exit 1
+[[ ! -x ${PG_BASEBACKUP} ]] && echo "ERROR: pg_basebackup was not found, exiting.." && exit 1
+
+# PG connstring does not like extra settings
+SHORT_DB_URL=$(echo $DATABASE_URL | cut -d / -f1-3)
+
+echo "Current time is : $(date)"
+echo "== Starting MIQ DB backup =="
+
+${PG_BASEBACKUP} -x -d ${SHORT_DB_URL} -Ft -z -D ${PV_BACKUP_DIR}/miq_backup_${BACKUP_TIMESTAMP} -P -v
+
+[[ $? -ne 0 ]] && echo "ERROR: ${PG_BASEBACKUP} exited with abnormal status, please check backup status" && exit 1
+
+echo "Sucessfully finished backup : $(date)"
+echo "Backup stored at : ${PV_BACKUP_DIR}/miq_backup_${BACKUP_TIMESTAMP}"
