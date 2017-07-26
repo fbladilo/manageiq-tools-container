@@ -4,8 +4,7 @@ MAINTAINER ManageIQ https://github.com/ManageIQ/manageiq-appliance-build
 ## Set build ARGs
 ARG REF=master
 
-ENV APP_ROOT=/var/www/miq/vmdb \
-    CONTAINER_SCRIPTS_ROOT=/opt/manageiq/container-scripts \
+ENV CONTAINER_SCRIPTS_ROOT=/opt/manageiq/container-scripts \
     IMAGE_VERSION=${REF}
 
 ## Atomic/OpenShift Labels
